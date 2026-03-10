@@ -51,7 +51,7 @@ NEWSDATA_API_KEY=sua_chave_newsdata_aqui
 GEMINI_API_KEY=sua_chave_gemini_aqui
 ```
 
-> ⚠️ **Nunca commite este arquivo.** Ele já está no `.gitignore` por padrão.
+> **Nunca commite este arquivo.** Ele já está no `.gitignore` por padrão.
 
 ### 4. Compilar e executar
 
