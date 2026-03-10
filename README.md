@@ -1,4 +1,4 @@
-# Newsdecode 📰
+# Newsdecode
 
 App Android que busca notícias em tempo real e usa IA (Google Gemini) para gerar explicações detalhadas em português, tornando qualquer notícia acessível ao público geral.
 
