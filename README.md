@@ -44,7 +44,7 @@ App Android que busca notícias em tempo real e usa IA (Google Gemini) para gera
 
 ### 3. Configurar `local.properties`
 
-Na raiz do projeto, edite o arquivo `local.properties` e substitua os placeholders pelas suas chaves:
+Na raiz do projeto, crie o arquivo `local.properties` e substitua os placeholders pelas suas chaves:
 
 ```properties
 NEWSDATA_API_KEY=sua_chave_newsdata_aqui
