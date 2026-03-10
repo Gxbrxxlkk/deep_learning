@@ -1,89 +1,50 @@
-# Newsdecode
+# Newsdecode 📰
 
-App Android que busca notícias em tempo real e usa IA (Google Gemini) para gerar explicações detalhadas em português, tornando qualquer notícia acessível ao público geral.
-
----
-
-## Funcionalidades
-
-- **Feed de notícias** com categorias navegáveis (Política, Economia, Tecnologia, Ciência, Esportes, Entretenimento)
-- **Busca por palavra-chave** com suporte a termos curtos (menos de 4 caracteres)
-- **Scroll infinito** — novas notícias carregam automaticamente ao rolar o feed
-- **Descomplicar** — envia o artigo ao Gemini e retorna uma explicação estruturada em PT-BR
+App Android que busca notícias em tempo real e usa o **Google Gemini** para explicar cada notícia em português simples e acessível.
 
 ---
 
-## Tecnologias
+## Como rodar o projeto
 
-| Camada | Tecnologia |
+### 1. Chaves de API necessárias
+
+| Serviço | Onde obter |
 |---|---|
-| Linguagem | Kotlin |
-| Arquitetura | MVVM (Model-View-ViewModel) |
-| UI | Fragments + ViewBinding + Material Design |
-| Navegação | Navigation Component |
-| Rede | Retrofit + Gson |
-| Imagens | Coil |
-| LLM | Google Gemini 2.5 Flash (SDK generativeai) |
-| API de notícias | NewsData.io |
+| **NewsData.io** | [newsdata.io](https://newsdata.io) |
+| **Google Gemini** | [aistudio.google.com](https://aistudio.google.com) |
 
----
+### 2. Configurar `local.properties`
 
-## Configuração
-
-### 1. Pré-requisitos
-- Android Studio Hedgehog ou superior
-- JDK 8+
-- Conta nas APIs abaixo
-
-### 2. Chaves de API necessárias
-
-| Serviço | Onde obter | Uso |
-|---|---|---|
-| **NewsData.io** | [newsdata.io](https://newsdata.io) | Busca de notícias |
-| **Google Gemini** | [aistudio.google.com](https://aistudio.google.com) | Explicações via LLM |
-
-### 3. Configurar `local.properties`
-
-Na raiz do projeto, crie o arquivo `local.properties` e substitua os placeholders pelas suas chaves:
+Na raiz do projeto, edite o arquivo `local.properties` e adicione:
 
 ```properties
-NEWSDATA_API_KEY=sua_chave_newsdata_aqui
-GEMINI_API_KEY=sua_chave_gemini_aqui
+NEWSDATA_API_KEY=sua_chave_aqui
+GEMINI_API_KEY=sua_chave_aqui
 ```
 
-> **Nunca commite este arquivo.** Ele já está no `.gitignore` por padrão.
-
-### 4. Compilar e executar
+### 3. Compilar
 
 Abra o projeto no Android Studio e execute em um dispositivo ou emulador com Android 7.0+ (API 24).
 
 ---
 
-## Arquitetura
+## Como o Gemini é utilizado
+
+Ao tocar em **"Descomplicar"** em qualquer notícia, o app envia o conteúdo do artigo para o Gemini e exibe uma explicação estruturada em português.
+
+### Onde fica no código
+
+Todo o código relacionado ao Gemini está em:
 
 ```
-com.example.newsdecode
-├── api/
-│   └── NewsApiService.kt       # Interface Retrofit com os endpoints da NewsData.io
-├── model/
-│   └── NewsModels.kt           # Data classes: NewsResponse, Article, Source
-├── viewmodel/
-│   └── NewsViewModel.kt        # Lógica de negócio: fetch, busca, paginação, Gemini
-├── Config.kt                   # Acesso centralizado às chaves via BuildConfig
-├── FirstFragment.kt            # Tela do feed (chips, busca, scroll infinito)
-├── SecondFragment.kt           # Tela de explicação do Gemini
-├── NewsAdapter.kt              # Adapter da RecyclerView
-└── MainActivity.kt             # Activity host com Navigation Component
+app/src/main/java/com/example/newsdecode/viewmodel/NewsViewModel.kt
 ```
 
----
+As partes principais dentro desse arquivo:
 
-## Como funciona a integração com o Gemini
-
-O app usa o SDK oficial `com.google.ai.client.generativeai`. Ao tocar em **Descomplicar**, o `NewsViewModel` monta um prompt com título, descrição e conteúdo do artigo e envia ao modelo:
-
+**Inicialização do modelo** (linha ~60)
 ```kotlin
-val generativeModel = GenerativeModel(
+private val generativeModel = GenerativeModel(
     modelName = "gemini-2.5-flash",
     apiKey = Config.GEMINI_API_KEY,
     generationConfig = generationConfig {
@@ -92,8 +53,15 @@ val generativeModel = GenerativeModel(
 )
 ```
 
-**Técnicas de prompt engineering usadas:**
-- **Role prompting** — "Você é um jornalista experiente..." direciona estilo e vocabulário
-- **Instrução negativa** — proíbe saudações que o modelo geraria por padrão
-- **Output estruturado** — seções fixas com emojis garantem consistência na UI
-- **Prompt condicional** — seção de termos técnicos só aparece para artigos com conteúdo substancial (> 300 chars)
+**Chamada ao modelo** — função `explainArticle()` (linha ~160)
+```kotlin
+val response = generativeModel.generateContent(prompt)
+_explanation.value = response.text
+```
+
+**O prompt** é montado dentro de `explainArticle()` e instrui o Gemini a:
+- Responder sempre em Português do Brasil
+- Seguir uma estrutura fixa (O que aconteceu / Pontos principais / Por que isso importa)
+- Não usar saudações ou introduções
+- Incluir explicação de termos técnicos apenas quando o artigo for longo o suficiente
+EOF
