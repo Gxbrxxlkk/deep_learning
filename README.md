@@ -42,7 +42,7 @@ app/src/main/java/com/example/newsdecode/viewmodel/NewsViewModel.kt
 
 As partes principais dentro desse arquivo:
 
-**Inicialização do modelo** (linha ~60)
+**Inicialização do modelo** (linha 90)
 ```kotlin
 private val generativeModel = GenerativeModel(
     modelName = "gemini-2.5-flash",
