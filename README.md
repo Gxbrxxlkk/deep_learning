@@ -25,7 +25,9 @@ GEMINI_API_KEY=sua_chave_aqui
 ### 3. Compilar
 
 Abra o projeto no Android Studio e execute em um dispositivo ou emulador com Android 7.0+ (API 24).
+
 Testado em: Android 15 (Xiaomi 12) — requer Android 7.0+ (API 24)
+
 ---
 
 ## Como o Gemini é utilizado
