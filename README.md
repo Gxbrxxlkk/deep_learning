@@ -53,7 +53,7 @@ private val generativeModel = GenerativeModel(
 )
 ```
 
-**Chamada ao modelo** — função `explainArticle()` (linha ~160)
+**Chamada ao modelo** — função `explainArticle()` (linha 248)
 ```kotlin
 val response = generativeModel.generateContent(prompt)
 _explanation.value = response.text
@@ -64,4 +64,3 @@ _explanation.value = response.text
 - Seguir uma estrutura fixa (O que aconteceu / Pontos principais / Por que isso importa)
 - Não usar saudações ou introduções
 - Incluir explicação de termos técnicos apenas quando o artigo for longo o suficiente
-EOF
